@@ -1425,7 +1425,8 @@
     get planetScale() { return planetGroup ? Math.round(planetGroup.scale.x * 1000) / 1000 : 0; },
     get theme() { return theme; },
     get radius() { return Math.round(cam.radius * 10) / 10; },
-    get intro() { return intro; }
+    get intro() { return intro; },
+    get frameCount() { return frames.length; }
   };
   setSectionTarget('about');
   prevCamPos.copy(camera.position);
