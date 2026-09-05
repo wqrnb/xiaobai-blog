@@ -1,0 +1,94 @@
+# 小白超白的空间 · Xiaobai's Space
+
+**小白超白的** 的个人作品集官网。
+
+当前版本是 **v5 3D 星球展厅**：打开网站会经历一次粉白能量汇聚，随后一颗占据画面中心的主角星球展开——程序化生成的粉色大陆光斑、发光经纬网格、流动能量河流、云层光雾、粒子星环与漂浮水晶，背景是明亮的粉白星云与极光。
+
+- **真正的绕星球转动**：相机始终在星球外的球面轨道上，点击导航或星球发光节点时沿弧线飞行（带倾斜、FOV 变化、粒子拖尾与白色闪光）；拖拽像转地球仪一样连续旋转并带惯性，松手自动吸附到最近的分区正面；滚轮缩放限制在近景-中景。
+- **五个分区**（关于小白·正面 / 精选·右侧 / 小红书岛·左侧 / B站视频墙·右后方 / 关注·背面）在星球表面都有发光节点和文字标识。
+- **全息内容浮层**：桌面端是右侧展开的大幅全息面板（3D 翻转进入 + 动态渐变描边 + 边缘发光），通过一条发光连接光束与星球上的当前分区节点相连；移动端则是底部展开面板，星球让出上方空间。
+
+## 线上访问
+
+```text
+https://wqrnb.github.io/xiaobai-world/
+```
+
+## 页面结构
+
+1. **关于小白**：大头像、名字、简介、B站 / 小红书数据、关注按钮
+2. **精选焦点**：最受欢迎的 6 件作品铺满面板
+3. **小红书岛**：32 件真实作品，支持分类筛选
+4. **B站视频墙**：42 支真实视频，播放 / 弹幕 / 日期
+5. **关注小白**：B站 / 小红书关注卡片 + 数据一览
+
+支持搜索、日夜粉白主题切换、内置原创八音盒（默认关闭）。3D 场景为纯程序化生成（地表着色器、发光网格、粒子爆发、冲击波、飞行拖尾、星云、bloom），WebGL 中不加载任何纹理图片。切换分区时触发弧线飞行、闪光与星云配色渐变；鼠标移动有光点拖尾，点击会溅出星尘，作品卡片支持 3D 倾斜和反光。按 B 可随时触发脉冲跃迁，按 / 或 Ctrl+K 可快速搜索。界面图标使用本地打包的 Lucide 线性 SVG 图标，不使用 emoji（作品标题中的真实 emoji 保留）。
+
+## 本地运行
+
+直接双击 `index.html` 即可，无需服务器、无需安装依赖：
+
+- 数据内嵌在 `assets/js/data.js`（`window.SITE_DATA`）
+- 3D 背景使用本地打包的 Three.js r128 与 bloom 后处理，file:// 可用
+- 图片使用本地相对路径，普通 `<img>` 在 file:// 下可正常显示
+- 无 CDN、无构建、无第三方运行时依赖
+
+## 内容数据
+
+真实统计：B站 关注287 · 粉丝2,518 · 获赞13.5万 · 播放163.9万 · 视频73 · 图文20；小红书 粉丝1千+ · 获赞与收藏1万+ · 小红书号888313077。
+
+## 目录
+
+```text
+site/
+├─ index.html
+├─ README.md
+├─ favicon.png
+├─ favicon.ico
+└─ assets/
+   ├─ css/style.css
+   ├─ js/data.js
+   ├─ js/icons.js
+   ├─ js/three-bg.js
+   ├─ js/app.js
+   ├─ lib/              # Three.js r128 与 bloom 后处理
+   └─ images/           # 小红书封面 / B站封面 / 头像
+```
+
+## 数据更新方式
+
+1. 更新 `xhs-home/demo-data.json` 和 `xhs-home/assets/` 下的封面、头像。
+2. 在项目根目录执行：
+
+```powershell
+node tools/build.mjs
+```
+
+3. 脚本会复制图片，并重新生成 `site/assets/js/data.js`。
+4. 本地双击 `site/index.html` 验收后重新部署。
+
+## 部署命令
+
+在项目根目录执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/deploy.ps1
+```
+
+或手动部署：
+
+```powershell
+cd site
+git init -b main
+git add -A
+git commit -m "deploy: 小白超白的空间"
+gh repo create <用户名>/xiaobai-world --public --source . --remote origin --push
+gh api repos/<用户名>/xiaobai-world/pages -f "source[branch]=main" -f "source[path]=/" -X POST
+```
+
+## 许可与素材
+
+- 代码：MIT
+- 作品封面、头像、标题、数据均来自「小白超白的」公开主页，仅用于个人作品集展示
+- 未使用受版权保护的图片、字体或音乐文件；背景音乐为内置原创程序化八音盒
+- 3D 背景的分幕转场与滚动相机思路参考了开源项目 `brunosimon/folio-2019`（MIT License）

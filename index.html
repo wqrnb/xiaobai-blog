@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ff7bac">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="shortcut icon" type="image/png" href="favicon.ico">
+  <meta name="description" content="小白超白的 · 星球庄园 3D 博客 — 真实作品、文章式详情、球面轨道巡游。">
+  <title>小白超白的 · 星球庄园 · Xiaobai's Planet Manor</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <script src="assets/js/icons.js"></script>
+
+  <div class="bg-scene" aria-hidden="true">
+    <div class="webgl-stage" id="webgl-stage-wrap">
+      <canvas id="webgl-stage"></canvas>
+    </div>
+    <svg class="link-beam" id="link-beam" aria-hidden="true">
+      <line id="beam-line" class="beam-line" x1="0" y1="0" x2="0" y2="0"></line>
+      <line id="beam-dash" class="beam-dash" x1="0" y1="0" x2="0" y2="0"></line>
+      <circle id="beam-node-glow" class="beam-node-glow" cx="0" cy="0" r="9"></circle>
+      <circle id="beam-panel-dot" class="beam-panel-dot" cx="0" cy="0" r="4"></circle>
+    </svg>
+    <div class="aurora aurora-a"></div>
+    <div class="aurora aurora-b"></div>
+    <div class="aurora aurora-c"></div>
+    <div class="sparkles" id="sparkles"></div>
+    <div class="floaties" id="floaties"></div>
+    <div class="intro-flash" id="intro-flash"></div>
+  </div>
+
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#" data-view="about">
+      <span class="brand-badge"><svg class="icon" aria-hidden="true"><use href="#i-heart"></use></svg></span>
+      <span class="brand-text">
+        <b>小白超白的 · 星球庄园</b>
+        <i>XIAOBAI'S PLANET MANOR · 3D BLOG</i>
+      </span>
+    </a>
+
+    <nav class="nav-links" aria-label="星球导航">
+      <a href="#" data-view="about" class="active">关于小白</a>
+      <a href="#" data-view="featured">精选</a>
+      <a href="#" data-view="xhs">小红书</a>
+      <a href="#" data-view="bili">B站</a>
+      <a href="#" data-view="follow">关注</a>
+    </nav>
+
+    <div class="top-actions">
+      <button class="icon-btn" id="search-btn" title="搜索作品（ / ）" aria-label="搜索作品"><svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg></button>
+      <button class="icon-btn" id="theme-btn" title="切换日夜氛围" aria-label="切换日夜氛围"><svg class="icon" aria-hidden="true"><use href="#i-moon"></use></svg></button>
+      <button class="icon-btn" id="music-btn" title="播放背景音乐（默认关闭）" aria-label="播放背景音乐"><svg class="icon" aria-hidden="true"><use href="#i-music"></use></svg></button>
+      <button class="icon-btn pulse-btn" id="pulse-btn" title="脉冲跃迁（ B ）" aria-label="脉冲跃迁"><svg class="icon" aria-hidden="true"><use href="#i-sparkles"></use></svg></button>
+    </div>
+  </header>
+
+  <main class="world-main">
+    <div class="view-panel" id="view-panel"></div>
+  </main>
+
+  <div class="search-panel" id="search-panel" aria-hidden="true">
+    <div class="search-card">
+      <div class="search-head">
+        <div class="search-input-wrap">
+          <span><svg class="icon" aria-hidden="true"><use href="#i-search"></use></svg></span>
+          <input id="search-input" type="search" placeholder="搜「开箱 / GBC / chiikawa / 测评」" autocomplete="off">
+        </div>
+        <button class="icon-btn ghost" id="search-close" aria-label="关闭搜索"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+      </div>
+      <div class="search-hints" id="search-hints">
+        <button data-q="开箱"><svg class="icon" aria-hidden="true"><use href="#i-package"></use></svg> 开箱</button>
+        <button data-q="GBC"><svg class="icon" aria-hidden="true"><use href="#i-guitar"></use></svg> GBC</button>
+        <button data-q="chiikawa"><svg class="icon" aria-hidden="true"><use href="#i-rabbit"></use></svg> chiikawa</button>
+        <button data-q="测评"><svg class="icon" aria-hidden="true"><use href="#i-shopping-bag"></use></svg> 测评</button>
+        <button data-q="收纳"><svg class="icon" aria-hidden="true"><use href="#i-package"></use></svg> 收纳</button>
+      </div>
+      <ul class="search-results" id="search-results"></ul>
+    </div>
+  </div>
+
+  <div class="modal" id="detail-modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-detail></div>
+    <article class="detail-card" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+      <button class="detail-close icon-btn" data-close-detail aria-label="关闭详情"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+      <div class="detail-cover-wrap">
+        <img id="detail-cover" alt="">
+        <span class="detail-cat" id="detail-cat"></span>
+      </div>
+      <div class="detail-body">
+        <p class="detail-type" id="detail-type"></p>
+        <h2 id="detail-title"></h2>
+        <div class="detail-stats" id="detail-stats"></div>
+        <p class="detail-note">数据来自小白超白的真实公开主页。</p>
+        <a class="primary-link" id="detail-link" href="#" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-external-link"></use></svg> 打开原作品</a>
+      </div>
+    </article>
+  </div>
+
+  <canvas class="fx-canvas" id="fx-canvas" aria-hidden="true"></canvas>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/lib/three.min.js"></script>
+  <script src="assets/lib/OrbitControls.js"></script>
+  <script src="assets/lib/postprocessing/CopyShader.js"></script>
+  <script src="assets/lib/postprocessing/EffectComposer.js"></script>
+  <script src="assets/lib/postprocessing/ShaderPass.js"></script>
+  <script src="assets/lib/postprocessing/LuminosityHighPassShader.js"></script>
+  <script src="assets/lib/postprocessing/UnrealBloomPass.js"></script>
+  <script src="assets/lib/postprocessing/RenderPass.js"></script>
+  <script src="assets/js/three-bg.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
