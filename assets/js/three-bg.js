@@ -638,7 +638,14 @@
       var label = new THREE.Sprite(new THREE.SpriteMaterial({
         map: makeLabelTexture(v.label, v.sub), transparent: true, depthWrite: false
       }));
-      label.position.copy(pos).add(dir.clone().multiplyScalar(0.9));
+      var labelPos = {
+        about: new THREE.Vector3(0, 12, 0),
+        featured: new THREE.Vector3(13, 0, 0),
+        xhs: new THREE.Vector3(-13, 0, 0),
+        bili: new THREE.Vector3(12, 0, -12),
+        follow: new THREE.Vector3(0, -12, 0)
+      }[key] || dir.clone().multiplyScalar(13);
+      label.position.copy(labelPos);
       label.scale.set(4.6, 1.15, 1);
       group.add(label);
 
@@ -957,6 +964,7 @@
     setSectionTarget(view);
     if (!isSnap && !REDUCED) startWarp();
     dispatch('xwb:view', { view: view });
+    loadFramesForView(view);
   }
 
   /* 在节点处绽放一小簇星尘（定格展示时刻） */
@@ -1303,6 +1311,7 @@
       a.ring.rotation.z += dt * 0.4;
       var ls = isActive ? 1.12 : 1;
       a.label.scale.set(4.6 * ls, 1.15 * ls, 1);
+      a.label.visible = !isActive;
       a.orb.material.color.copy(cur.label).multiplyScalar(2.0);
       a.glow.material.color.copy(cur.label).multiplyScalar(1.6);
     });
@@ -1381,7 +1390,7 @@
   };
   function loadFramesForView(view, max) {
     if (!api.supported || !frames.length) return;
-    var limit = max || (IS_SMALL ? 3 : 6);
+    var limit = max || 999;
     var n = 0;
     frames.forEach(function (f) {
       if (f.view === view && !f.texture && n < limit) {
