@@ -1,4 +1,4 @@
-﻿/* 小白超白的空间 v5 · 3D 星球展厅 */
+/* 小白超白的空间 v5 · 3D 星球展厅 */
 (function () {
   'use strict';
 
@@ -91,16 +91,9 @@
   }
 
   function featuredHtml() {
-    var xhsTop = DATA.xhs.items.slice().sort(function (a, b) { return parseCount(b.likes) - parseCount(a.likes); }).slice(0, 3);
-    var biliTop = DATA.bili.items.slice().sort(function (a, b) { return parseCount(b.play) - parseCount(a.play); }).slice(0, 3);
-    var featured = [], seen = {};
-    for (var i = 0; i < 3; i++) {
-      [xhsTop[i], biliTop[i]].forEach(function (item) {
-        if (item && !seen[item.id]) { seen[item.id] = true; featured.push({ item: item, kind: platformOf(item) }); }
-      });
-    }
+    var featured = (DATA.featuredIds || []).map(function (id) { return findItem(id); }).filter(Boolean);
     return viewShell('featured',
-      sectionHead('FEATURED', 'sparkles', '精选焦点', '最受欢迎的 6 件作品', 'featured') +
+      sectionHead('FEATURED', 'sparkles', '精选焦点', '小白精选的 6 件作品，每一份喜欢都在发光', 'featured') +
       '<div class="featured-grid">' + featured.map(function (entry, index) { return workCardHtml(entry.item, entry.kind, index); }).join('') + '</div>');
   }
 
